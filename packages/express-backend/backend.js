@@ -39,6 +39,12 @@ const findUserByName = (name) => {
   );
 };
 
+const findUserByJob = (job) => {
+  return users["users_list"].filter(
+    (user) => user["job"] === job
+  );
+};
+
 const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
@@ -46,7 +52,7 @@ const addUser = (user) => {
   users["users_list"].push(user);
   return user;
 };
-
+  
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -58,6 +64,19 @@ app.get("/users", (req, res) => {
   if (name != undefined) {
     let result = findUserByName(name);
     result = { users_list: result };
+    res.send(result);
+  } else {
+    res.send(users);
+  }
+});
+
+app.get("/users", (req, res) => {
+  const name = req.query.name;
+  const job = req.query.job;
+  if (name != undefined) {
+    let result_name = findUserByName(name);
+    let result_job = findUserByJob(job);
+    let result = {users_list: result_name.filter((user) => user["job"] === result_job["job"])};
     res.send(result);
   } else {
     res.send(users);
@@ -79,6 +98,24 @@ app.post("/users", (req, res) => {
   addUser(userToAdd);
   res.send();
 });
+
+/*app.delete("/users/:id", (req, res) => {
+  const delete_id = req.params["id"];
+  let updated = null;
+
+  for(let i = 0; i < users["users_list"].length; i++) {
+    if(users["users_list"][i].id === delete_id) {
+      updated = users.splice(i, 1);
+      break;
+    }
+  }
+
+  if (result === undefined) {
+    res.status(404).send("Couldn't delete user");
+  } else {
+    res.send(updated);
+  }
+});*/
 
 app.listen(port, () => {
   console.log(
