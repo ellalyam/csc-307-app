@@ -59,7 +59,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/users", (req, res) => {
+/*app.get("/users", (req, res) => {
   const name = req.query.name;
   if (name != undefined) {
     let result = findUserByName(name);
@@ -68,22 +68,25 @@ app.get("/users", (req, res) => {
   } else {
     res.send(users);
   }
-});
+});*/
 
 app.get("/users", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
+  let result = users["users_list"];
+  
   if (name != undefined) {
-    let result_name = findUserByName(name);
-    let result_job = findUserByJob(job);
-    let result = {users_list: result_name.filter((user) => user["job"] === result_job["job"])};
-    res.send(result);
-  } else {
-    res.send(users);
+    result = findUserByName(name);
   }
+
+  if (job != undefined) {
+    result = result.filter((user) => user["job"] === job);
+  }
+
+  res.send(result);
 });
 
-app.get("/users/:id", (req, res) => {
+/*app.get("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
   let result = findUserById(id);
   if (result === undefined) {
@@ -91,7 +94,7 @@ app.get("/users/:id", (req, res) => {
   } else {
     res.send(result);
   }
-});
+});*/
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
@@ -99,23 +102,13 @@ app.post("/users", (req, res) => {
   res.send();
 });
 
-/*app.delete("/users/:id", (req, res) => {
-  const delete_id = req.params["id"];
-  let updated = null;
+app.delete("/users/:id", (req, res) => {
+  const id = req.params["id"];
+  let deleted = findUserById(id);
+  let updated = users["users_list"].filter((user) => user !== deleted);
 
-  for(let i = 0; i < users["users_list"].length; i++) {
-    if(users["users_list"][i].id === delete_id) {
-      updated = users.splice(i, 1);
-      break;
-    }
-  }
-
-  if (result === undefined) {
-    res.status(404).send("Couldn't delete user");
-  } else {
-    res.send(updated);
-  }
-});*/
+  res.send(updated);
+});
 
 app.listen(port, () => {
   console.log(
