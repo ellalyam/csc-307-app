@@ -1,7 +1,11 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
+
+app.use(cors());
+app.use(express.json());
 
 const users = {
     users_list: [
@@ -46,8 +50,6 @@ const addUser = (user) => {
   users["users_list"].push(user);
   return user;
 };
-  
-app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -66,7 +68,7 @@ app.get("/users", (req, res) => {
     result = result.filter((user) => user["job"] === job);
   }
 
-  res.send(result);
+  res.send({users_list: result});
 });
 
 app.get("/users", (req, res) => {
