@@ -30,6 +30,7 @@ function MyApp() {
       });
   }, []);
 
+  // Fix the check for the 201 code
   function postUser(person) {
     const promise = fetch("http://localhost:8000/users", {
       method: "POST",
@@ -38,13 +39,20 @@ function MyApp() {
       },
       body: JSON.stringify(person)
     });
-  
-    return promise;
+    
+    return promise.then((res) => {
+      if (res.status === 201) {
+        return res.json();
+      } else {
+        throw new Error("Failed to create user.")
+      }
+    });
+    
   }
 
   function updateList(person) {
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then((person) => setCharacters([...characters, person]))
       .catch((error) => {
         console.log(error);
       });
