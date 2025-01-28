@@ -50,7 +50,7 @@ function createID() {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz';
   const digits = '0123456789';
 
-  const letters = Array.from({length: 3}, () => letters.charAt(Math.floor(Math.random() * letters.length))).join('');
+  const letters = Array.from({length: 3}, () => alphabet.charAt(Math.floor(Math.random() * alphabet.length))).join('');
   const numbers = Array.from({length: 3}, () => digits.charAt(Math.floor(Math.random() * digits.length))).join('');
 
   return letters + numbers;
