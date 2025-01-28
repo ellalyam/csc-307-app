@@ -47,7 +47,7 @@ const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
 const addUser = (user) => {
-  user.id = Math.floor(Math.random() * 900) + 100;
+  user.id = (Math.floor(Math.random() * 900) + 100).toString();
   users["users_list"].push(user);
   return user;
 };
@@ -108,8 +108,8 @@ app.delete("/users/:id", (req, res) => {
   let deleted = findUserById(id);
 
   if (deleted !== undefined) {
-    users["users_list"] = users["users_list"].filter((user) => user !== deleted);
-    res.status(204).send();
+    users["users_list"] = users["users_list"].filter((user) => user.id !== id);
+    res.status(204).send(users);
   } else {
     res.status(404);
   }
