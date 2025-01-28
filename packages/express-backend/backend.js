@@ -47,13 +47,13 @@ const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
 function createID() {
-  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
   const digits = '0123456789';
 
-  const randomLetters = Array.from({ length: 3 }, () => letters.charAt(Math.floor(Math.random() * letters.length))).join('');
-  const randomDigits = Array.from({ length: 3 }, () => digits.charAt(Math.floor(Math.random() * digits.length))).join('');
+  const letters = Array.from({length: 3}, () => letters.charAt(Math.floor(Math.random() * letters.length))).join('');
+  const numbers = Array.from({length: 3}, () => digits.charAt(Math.floor(Math.random() * digits.length))).join('');
 
-  return randomLetters + randomDigits;
+  return letters + numbers;
 }
 
 const addUser = (user) => {
@@ -62,10 +62,12 @@ const addUser = (user) => {
   return user;
 };
 
+// Get home page
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// Get user by name and job
 app.get("/users", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
@@ -82,6 +84,7 @@ app.get("/users", (req, res) => {
   res.send({users_list: result});
 });
 
+// Get user by name
 app.get("/users", (req, res) => {
   const name = req.query.name;
   if (name != undefined) {
@@ -93,10 +96,12 @@ app.get("/users", (req, res) => {
   }
 });
 
+// Get all users
 app.get("/users", (req, res) => {
   res.send(users);
 });
 
+// Get user by ID
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"]; //or req.params.id
   let result = findUserById(id);
@@ -107,12 +112,14 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
+// Create new user
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   const user = addUser(userToAdd);
   res.status(201).send(user);
 });
 
+// Delete user
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
   let deleted = findUserById(id);
