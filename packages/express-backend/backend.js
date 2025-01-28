@@ -46,8 +46,18 @@ const findUserByName = (name) => {
 const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
+function createID() {
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const digits = '0123456789';
+
+  const randomLetters = Array.from({ length: 3 }, () => letters.charAt(Math.floor(Math.random() * letters.length))).join('');
+  const randomDigits = Array.from({ length: 3 }, () => digits.charAt(Math.floor(Math.random() * digits.length))).join('');
+
+  return randomLetters + randomDigits;
+}
+
 const addUser = (user) => {
-  user.id = (Math.floor(Math.random() * 900) + 100).toString();
+  user.id = createID();
   users["users_list"].push(user);
   return user;
 };
