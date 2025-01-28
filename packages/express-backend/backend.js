@@ -106,9 +106,13 @@ app.post("/users", (req, res) => {
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
   let deleted = findUserById(id);
-  let updated = users["users_list"].filter((user) => user !== deleted);
 
-  res.send(updated);
+  if (deleted !== undefined) {
+    users["users_list"] = users["users_list"].filter((user) => user !== deleted);
+    res.status(204).send();
+  } else {
+    res.status(404);
+  }
 });
 
 app.listen(port, () => {

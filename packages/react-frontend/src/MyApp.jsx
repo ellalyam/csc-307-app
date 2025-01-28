@@ -6,15 +6,29 @@ function MyApp() {
   const [characters, setCharacters] = useState([]);
 
   function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
+    const deleted = characters[index].id;
+    const promise = fetch(`http://localhost:8000/users/${deleted}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
-    setCharacters(updated);
-  }
 
-  /*function updateList(person) {
-    setCharacters([...characters, person]);
-  } */
+    return promise.then((res) => {
+      if (res.status === 204) {
+        const updated = characters.filter((character, i) => {
+          return i !== index;
+        });
+        setCharacters(updated);
+      } else if (res.status === 404) {
+        throw new Error("Character not found");
+      } else {
+        throw new Error("Failed to delete character");
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");
