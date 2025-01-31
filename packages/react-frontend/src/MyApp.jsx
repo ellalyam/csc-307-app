@@ -50,7 +50,7 @@ function MyApp() {
 
   // Delete user
   function removeOneCharacter(index) {
-    const deleted = characters[index].id;
+    const deleted = characters[index]._id;
     const promise = fetch(`http://localhost:8000/users/${deleted}`, {
       method: "DELETE",
       headers: {

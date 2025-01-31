@@ -3,16 +3,18 @@ import userModel from "../models/user.js";
 
 mongoose.set("debug", true);
 
-mongoose
-  .connect("mongodb://localhost:27017/users", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .catch((error) => console.log(error));
+// mongoose
+//   .connect("mongodb://localhost:27017/users", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .catch((error) => console.log(error));
 
 function getUsers(name, job) {
   let promise;
-  if (name === undefined && job === undefined) {
+  if (name && job) {
+    promise = findUserByNameAndJob(name, job);
+  } else if(name === undefined && job === undefined) {
     promise = userModel.find();
   } else if (name && !job) {
     promise = findUserByName(name);
@@ -40,10 +42,20 @@ function findUserByJob(job) {
   return userModel.find({ job: job });
 }
 
+function findUserByNameAndJob(name, job) {
+  return userModel.find({ name: name, job: job});
+}
+
+function findUserByIdAndDelete(id) {
+  return userModel.findByIdAndDelete(id);
+}
+
 export default {
   addUser,
   getUsers,
   findUserById,
   findUserByName,
   findUserByJob,
+  findUserByNameAndJob,
+  findUserByIdAndDelete
 };
