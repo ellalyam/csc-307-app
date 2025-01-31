@@ -19,60 +19,15 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
-const users = {
-    users_list: [
-      {
-        id: "xyz789",
-        name: "Charlie",
-        job: "Janitor"
-      },
-      {
-        id: "abc123",
-        name: "Mac",
-        job: "Bouncer"
-      },
-      {
-        id: "ppp222",
-        name: "Mac",
-        job: "Professor"
-      },
-      {
-        id: "yat999",
-        name: "Dee",
-        job: "Aspring actress"
-      },
-      {
-        id: "zap555",
-        name: "Dennis",
-        job: "Bartender"
-      }
-    ]
-};
+// function createID() {
+//   const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+//   const digits = '0123456789';
 
-// const findUserByName = (name) => {
-//   return users["users_list"].filter(
-//     (user) => user["name"] === name
-//   );
-// };
+//   const letters = Array.from({length: 3}, () => alphabet.charAt(Math.floor(Math.random() * alphabet.length))).join('');
+//   const numbers = Array.from({length: 3}, () => digits.charAt(Math.floor(Math.random() * digits.length))).join('');
 
-// const findUserById = (id) =>
-//   users["users_list"].find((user) => user["id"] === id);
-
-function createID() {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  const digits = '0123456789';
-
-  const letters = Array.from({length: 3}, () => alphabet.charAt(Math.floor(Math.random() * alphabet.length))).join('');
-  const numbers = Array.from({length: 3}, () => digits.charAt(Math.floor(Math.random() * digits.length))).join('');
-
-  return letters + numbers;
-}
-
-// const addUser = (user) => {
-//   user.id = createID();
-//   users["users_list"].push(user);
-//   return user;
-// };
+//   return letters + numbers;
+// }
 
 // Get home page
 app.get("/", (req, res) => {
@@ -122,11 +77,11 @@ app.post("/users", (req, res) => {
 
 // Delete user
 app.delete("/users/:id", (req, res) => {
-  const id = req.params["_id"];
+  const id = req.params.id;
   
   userService.findUserByIdAndDelete(id).then((deleted) => {
     if(deleted != undefined) {
-      res.status(204).send(users);
+      res.status(204).send();
     } else {
       res.status(404);
     }
